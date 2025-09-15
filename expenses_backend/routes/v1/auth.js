@@ -5,6 +5,60 @@ const { User, Profile } = require('../../models');
 const { generateToken, authenticateToken } = require('../../middleware/auth');
 const { sequelize } = require('../../models');
 
+/**
+ * @openapi
+ * tags:
+ *   - name: Auth
+ *     description: 인증 관련 API
+ */
+
+/**
+ * @openapi
+ * /auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: 회원가입 및 기본 프로필 생성
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password, name, profileName]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 minLength: 6
+ *               name:
+ *                 type: string
+ *               profileName:
+ *                 type: string
+ *               currencyCode:
+ *                 type: string
+ *                 example: KRW
+ *     responses:
+ *       201:
+ *         description: 회원가입 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: 유효성 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       409:
+ *         description: 이메일 중복
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 // POST /api/v1/auth/register
 router.post('/auth/register', [
   body('email').isEmail().normalizeEmail().withMessage('유효한 이메일을 입력해주세요'),
@@ -83,6 +137,45 @@ router.post('/auth/register', [
   }
 });
 
+/**
+ * @openapi
+ * /auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: 로그인 및 JWT 발급
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: 로그인 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: 유효성 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: 인증 실패
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 // POST /api/v1/auth/login
 router.post('/auth/login', [
   body('email').isEmail().normalizeEmail().withMessage('유효한 이메일을 입력해주세요'),
@@ -149,6 +242,28 @@ router.post('/auth/login', [
   }
 });
 
+/**
+ * @openapi
+ * /auth/me:
+ *   get:
+ *     tags: [Auth]
+ *     summary: 내 정보 조회
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: 토큰 없음/유효하지 않음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 // GET /api/v1/auth/me
 router.get('/auth/me', authenticateToken, async (req, res) => {
   try {
@@ -186,6 +301,28 @@ router.get('/auth/me', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /auth/refresh:
+ *   post:
+ *     tags: [Auth]
+ *     summary: 액세스 토큰 갱신
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 갱신 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: 인증 실패
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 // POST /api/v1/auth/refresh
 router.post('/auth/refresh', authenticateToken, async (req, res) => {
   try {

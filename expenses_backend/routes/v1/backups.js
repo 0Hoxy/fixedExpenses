@@ -17,6 +17,13 @@ const {
   sequelize
 } = require('../../models');
 
+/**
+ * @openapi
+ * tags:
+ *   - name: Backups
+ *     description: 백업/복원 API
+ */
+
 // Multer 설정 (파일 업로드용)
 const upload = multer({
   dest: 'uploads/',
@@ -36,6 +43,16 @@ const upload = multer({
 const backupJobs = new Map();
 const restoreJobs = new Map();
 
+/**
+ * @openapi
+ * /backups:
+ *   post:
+ *     tags: [Backups]
+ *     summary: 백업 작업 시작
+ *     responses:
+ *       202:
+ *         description: 작업 접수됨
+ */
 // POST /api/v1/backups - 백업 파일 생성
 router.post('/backups', async (req, res) => {
   try {
@@ -73,6 +90,24 @@ router.post('/backups', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /backups/{jobId}:
+ *   get:
+ *     tags: [Backups]
+ *     summary: 백업 작업 상태 조회
+ *     parameters:
+ *       - in: path
+ *         name: jobId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ *       404:
+ *         description: 작업 없음
+ */
 // GET /api/v1/backups/:jobId - 백업 진행 상태/결과 조회
 router.get('/backups/:jobId', async (req, res) => {
   try {
@@ -115,6 +150,28 @@ router.get('/backups/:jobId', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /restores:
+ *   post:
+ *     tags: [Backups]
+ *     summary: 백업 파일로 복원 시작
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               backupFile:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       202:
+ *         description: 작업 접수됨
+ *       400:
+ *         description: 파일 누락
+ */
 // POST /api/v1/restores - 백업 파일로 복원
 router.post('/restores', upload.single('backupFile'), async (req, res) => {
   try {
@@ -159,6 +216,24 @@ router.post('/restores', upload.single('backupFile'), async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /restores/{jobId}:
+ *   get:
+ *     tags: [Backups]
+ *     summary: 복원 작업 상태 조회
+ *     parameters:
+ *       - in: path
+ *         name: jobId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ *       404:
+ *         description: 작업 없음
+ */
 // GET /api/v1/restores/:jobId - 복원 진행 상태 조회
 router.get('/restores/:jobId', async (req, res) => {
   try {
@@ -371,6 +446,24 @@ async function performRestore(jobId, backupFilePath) {
   }
 }
 
+/**
+ * @openapi
+ * /downloads/{filename}:
+ *   get:
+ *     tags: [Backups]
+ *     summary: 백업 파일 다운로드
+ *     parameters:
+ *       - in: path
+ *         name: filename
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: 파일 다운로드
+ *       404:
+ *         description: 파일 없음
+ */
 // 다운로드 엔드포인트
 router.get('/downloads/:filename', async (req, res) => {
   try {

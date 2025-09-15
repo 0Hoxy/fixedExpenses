@@ -11,6 +11,41 @@ const {
   ExpenditureDetailsInstallment
 } = require('../../models');
 
+/**
+ * @openapi
+ * tags:
+ *   - name: Reports
+ *     description: 리포트/통계 API
+ */
+
+/**
+ * @openapi
+ * /profiles/{profileId}/reports/monthly:
+ *   get:
+ *     tags: [Reports]
+ *     summary: 기간별 월 리포트 조회
+ *     parameters:
+ *       - in: path
+ *         name: profileId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: from
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '2025-01'
+ *       - in: query
+ *         name: to
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '2025-09'
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ */
 // GET /api/v1/profiles/:profileId/reports/monthly
 router.get('/profiles/:profileId/reports/monthly', async (req, res) => {
   try {

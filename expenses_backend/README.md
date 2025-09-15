@@ -76,6 +76,12 @@ npm run dev
 
 서버가 `http://localhost:3000`에서 실행됩니다.
 
+### 5. API 문서 (Swagger UI)
+
+- 문서 URL: `http://localhost:3000/api-docs`
+- 베이스 서버: `http://localhost:3000/api/v1`
+- JWT 인증이 필요한 엔드포인트는 우측 상단 Authorize 버튼에서 `Bearer <토큰>` 형태로 입력하세요.
+
 ## 📚 API 엔드포인트
 
 ### 헬스 체크

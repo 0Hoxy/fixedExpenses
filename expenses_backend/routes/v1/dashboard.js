@@ -12,6 +12,34 @@ const {
   PaymentHistory
 } = require('../../models');
 
+/**
+ * @openapi
+ * tags:
+ *   - name: Dashboard
+ *     description: 대시보드/집계 API
+ */
+
+/**
+ * @openapi
+ * /profiles/{profileId}/dashboard:
+ *   get:
+ *     tags: [Dashboard]
+ *     summary: 대시보드 데이터 조회
+ *     parameters:
+ *       - in: path
+ *         name: profileId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: month
+ *         schema:
+ *           type: string
+ *           example: '2025-09'
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ */
 // GET /api/v1/profiles/:profileId/dashboard
 router.get('/profiles/:profileId/dashboard', async (req, res) => {
   try {

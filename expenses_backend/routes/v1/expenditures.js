@@ -3,6 +3,39 @@ const router = express.Router();
 const { Op } = require('sequelize');
 const { Expenditure, Profile, Category, PaymentMethod, ExpenditureDetailsRegular, ExpenditureDetailsSubscription, ExpenditureDetailsInstallment, StatusHistory, sequelize } = require('../../models');
 
+/**
+ * @openapi
+ * tags:
+ *   - name: Expenditures
+ *     description: 고정지출 관리 API
+ */
+
+/**
+ * @openapi
+ * /profiles/{profileId}/expenditures:
+ *   post:
+ *     tags: [Expenditures]
+ *     summary: 지출 생성
+ *     parameters:
+ *       - in: path
+ *         name: profileId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Expenditure'
+ *     responses:
+ *       201:
+ *         description: 생성됨
+ *       400:
+ *         description: 유효성 오류
+ *       404:
+ *         description: 관련 리소스 없음
+ */
 // POST /api/v1/profiles/:profileId/expenditures
 router.post('/profiles/:profileId/expenditures', async (req, res) => {
   const transaction = await sequelize.transaction();
@@ -156,6 +189,61 @@ router.post('/profiles/:profileId/expenditures', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /profiles/{profileId}/expenditures:
+ *   get:
+ *     tags: [Expenditures]
+ *     summary: 지출 목록 조회
+ *     parameters:
+ *       - in: path
+ *         name: profileId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - in: query
+ *         name: categoryId
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           enum: [created_at, updated_at, itemName, paymentDay]
+ *           default: created_at
+ *       - in: query
+ *         name: sortOrder
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *           default: DESC
+ *       - in: query
+ *         name: month
+ *         schema:
+ *           type: string
+ *           example: '2025-09'
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ */
 // GET /api/v1/profiles/:profileId/expenditures
 router.get('/profiles/:profileId/expenditures', async (req, res) => {
   try {
@@ -271,6 +359,24 @@ router.get('/profiles/:profileId/expenditures', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /expenditures/{id}:
+ *   get:
+ *     tags: [Expenditures]
+ *     summary: 지출 상세 조회
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ *       404:
+ *         description: 없음
+ */
 // GET /api/v1/expenditures/:id
 router.get('/expenditures/:id', async (req, res) => {
   try {
@@ -327,6 +433,30 @@ router.get('/expenditures/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /expenditures/{id}:
+ *   patch:
+ *     tags: [Expenditures]
+ *     summary: 지출 수정
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: 수정됨
+ *       404:
+ *         description: 없음
+ */
 // PATCH /api/v1/expenditures/:id
 router.patch('/expenditures/:id', async (req, res) => {
   try {
@@ -423,6 +553,24 @@ router.patch('/expenditures/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /expenditures/{id}:
+ *   delete:
+ *     tags: [Expenditures]
+ *     summary: 지출 삭제
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: 삭제됨
+ *       404:
+ *         description: 없음
+ */
 // DELETE /api/v1/expenditures/:id
 router.delete('/expenditures/:id', async (req, res) => {
   try {
@@ -448,6 +596,40 @@ router.delete('/expenditures/:id', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /expenditures/{id}/payments/{month}:
+ *   put:
+ *     tags: [Expenditures]
+ *     summary: 월별 납부 상태 업데이트
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: month
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '2025-09'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               isPaid:
+ *                 type: boolean
+ *               paidTimestamp:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       200:
+ *         description: 업데이트됨
+ */
 // PUT /api/v1/expenditures/:id/payments/:month
 router.put('/expenditures/:id/payments/:month', async (req, res) => {
   try {
@@ -492,6 +674,38 @@ router.put('/expenditures/:id/payments/:month', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /expenditures/{id}/statuses/{effectiveMonth}:
+ *   put:
+ *     tags: [Expenditures]
+ *     summary: 상태 이력 업데이트
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: effectiveMonth
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: '2025-09-01'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [active, paused]
+ *     responses:
+ *       200:
+ *         description: 업데이트됨
+ */
 // PUT /api/v1/expenditures/:id/statuses/:effectiveMonth
 router.put('/expenditures/:id/statuses/:effectiveMonth', async (req, res) => {
   try {

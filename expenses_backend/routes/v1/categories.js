@@ -3,6 +3,39 @@ const router = express.Router();
 const { Category, Profile } = require('../../models');
 const { authenticateToken, checkProfileOwnership } = require('../../middleware/auth');
 
+/**
+ * @openapi
+ * tags:
+ *   - name: Categories
+ *     description: 카테고리 관리 API
+ */
+
+/**
+ * @openapi
+ * /profiles/{profileId}/categories:
+ *   get:
+ *     tags: [Categories]
+ *     summary: 프로필의 카테고리 목록 조회
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: profileId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: 인증 실패
+ *       404:
+ *         description: 프로필 없음
+ */
 // GET /api/v1/profiles/:profileId/categories
 router.get('/profiles/:profileId/categories', authenticateToken, checkProfileOwnership, async (req, res) => {
   try {
@@ -37,6 +70,46 @@ router.get('/profiles/:profileId/categories', authenticateToken, checkProfileOwn
   }
 });
 
+/**
+ * @openapi
+ * /profiles/{profileId}/categories:
+ *   post:
+ *     tags: [Categories]
+ *     summary: 카테고리 생성
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: profileId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name]
+ *             properties:
+ *               name:
+ *                 type: string
+ *               icon:
+ *                 type: string
+ *               color:
+ *                 type: string
+ *               isDefault:
+ *                 type: boolean
+ *     responses:
+ *       201:
+ *         description: 생성됨
+ *       400:
+ *         description: 유효성 오류
+ *       404:
+ *         description: 프로필 없음
+ *       409:
+ *         description: 중복 이름
+ */
 // POST /api/v1/profiles/:profileId/categories
 router.post('/profiles/:profileId/categories', authenticateToken, checkProfileOwnership, async (req, res) => {
   try {
