@@ -3,18 +3,18 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'Fixed Expenses API',
+    title: '고정지출 관리 어플리케이션 API',
     version: '1.0.0',
-    description: 'API for managing fixed expenses with support for regular, subscription, and installment payments',
+    description: '정기/구독/할부 지출을 포함한 고정지출을 관리하기 위한 REST API입니다.',
     contact: {
-      name: 'API Support',
-      email: 'support@example.com'
+      name: '고객 지원',
+      email: 'hoxydev9@gmail.com'
     }
   },
   servers: [
     {
       url: 'http://localhost:3000/api/v1',
-      description: 'Development server'
+      description: '개발 서버'
     }
   ],
   components: {
@@ -31,7 +31,7 @@ const swaggerDefinition = {
         properties: {
           id: { type: 'integer', example: 1 },
           email: { type: 'string', format: 'email', example: 'user@example.com' },
-          name: { type: 'string', example: 'John Doe' },
+          name: { type: 'string', example: '홍길동' },
           isVerified: { type: 'boolean', example: false },
           lastLoginAt: { type: 'string', format: 'date-time', nullable: true }
         }
@@ -41,7 +41,7 @@ const swaggerDefinition = {
         properties: {
           id: { type: 'integer', example: 1 },
           userId: { type: 'integer', example: 1 },
-          name: { type: 'string', example: 'My Profile' },
+          name: { type: 'string', example: '기본 프로필' },
           currencyCode: { type: 'string', example: 'KRW' }
         }
       },
@@ -50,7 +50,7 @@ const swaggerDefinition = {
         properties: {
           id: { type: 'integer', example: 1 },
           profileId: { type: 'integer', example: 1 },
-          name: { type: 'string', example: 'Food' },
+          name: { type: 'string', example: '식비' },
           icon: { type: 'string', example: '🍽️', nullable: true },
           color: { type: 'string', example: '#FF6B6B', nullable: true },
           isDefault: { type: 'boolean', example: false }
@@ -63,11 +63,11 @@ const swaggerDefinition = {
           profileId: { type: 'integer', example: 1 },
           categoryId: { type: 'integer', example: 1 },
           paymentMethodId: { type: 'integer', example: 1, nullable: true },
-          itemName: { type: 'string', example: 'Netflix Subscription' },
+          itemName: { type: 'string', example: '넷플릭스 구독' },
           paymentDay: { type: 'integer', minimum: 1, maximum: 31, example: 15 },
           paymentCycle: { type: 'string', example: 'MONTHLY' },
           type: { type: 'string', enum: ['REGULAR', 'SUBSCRIPTION', 'INSTALLMENT'], example: 'SUBSCRIPTION' },
-          memo: { type: 'string', nullable: true, example: 'Premium plan' }
+          memo: { type: 'string', nullable: true, example: '프리미엄 요금제' }
         }
       },
       ExpenditureDetailsRegular: {
@@ -85,7 +85,7 @@ const swaggerDefinition = {
         properties: {
           expenditureId: { type: 'integer', example: 1 },
           amount: { type: 'number', format: 'decimal', example: 15000 },
-          planName: { type: 'string', nullable: true, example: 'Premium' },
+          planName: { type: 'string', nullable: true, example: '프리미엄' },
           reminderDaysBefore: { type: 'integer', example: 3 }
         }
       },
@@ -127,6 +127,10 @@ const swaggerDefinition = {
               details: { type: 'array', items: { type: 'object' } }
             }
           }
+        },
+        example: {
+          success: false,
+          error: { code: 'UNAUTHORIZED', message: '인증이 필요합니다', details: [] }
         }
       },
       SuccessResponse: {
@@ -134,7 +138,8 @@ const swaggerDefinition = {
         properties: {
           success: { type: 'boolean', example: true },
           data: { type: 'object' }
-        }
+        },
+        example: { success: true, data: {} }
       },
       PaginatedResponse: {
         type: 'object',
@@ -155,12 +160,7 @@ const swaggerDefinition = {
         }
       }
     }
-  },
-  security: [
-    {
-      BearerAuth: []
-    }
-  ]
+  }
 };
 
 const options = {

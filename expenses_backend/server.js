@@ -59,7 +59,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'Fixed Expenses API Documentation'
+  customSiteTitle: '고정지출 관리 어플리케이션 API 문서',
+  swaggerOptions: { persistAuthorization: true }
 }));
 
 // 헬스 체크

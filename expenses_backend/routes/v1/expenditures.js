@@ -16,6 +16,8 @@ const { Expenditure, Profile, Category, PaymentMethod, ExpenditureDetailsRegular
  *   post:
  *     tags: [Expenditures]
  *     summary: 지출 생성
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: profileId
@@ -195,6 +197,8 @@ router.post('/profiles/:profileId/expenditures', async (req, res) => {
  *   get:
  *     tags: [Expenditures]
  *     summary: 지출 목록 조회
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: profileId
@@ -365,6 +369,8 @@ router.get('/profiles/:profileId/expenditures', async (req, res) => {
  *   get:
  *     tags: [Expenditures]
  *     summary: 지출 상세 조회
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -439,6 +445,8 @@ router.get('/expenditures/:id', async (req, res) => {
  *   patch:
  *     tags: [Expenditures]
  *     summary: 지출 수정
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -559,6 +567,8 @@ router.patch('/expenditures/:id', async (req, res) => {
  *   delete:
  *     tags: [Expenditures]
  *     summary: 지출 삭제
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -602,6 +612,8 @@ router.delete('/expenditures/:id', async (req, res) => {
  *   put:
  *     tags: [Expenditures]
  *     summary: 월별 납부 상태 업데이트
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -680,6 +692,8 @@ router.put('/expenditures/:id/payments/:month', async (req, res) => {
  *   put:
  *     tags: [Expenditures]
  *     summary: 상태 이력 업데이트
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

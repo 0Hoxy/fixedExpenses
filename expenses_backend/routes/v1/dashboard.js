@@ -25,6 +25,8 @@ const {
  *   get:
  *     tags: [Dashboard]
  *     summary: 대시보드 데이터 조회
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: profileId

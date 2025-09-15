@@ -24,6 +24,8 @@ const {
  *   get:
  *     tags: [Reports]
  *     summary: 기간별 월 리포트 조회
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: profileId

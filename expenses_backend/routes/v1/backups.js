@@ -49,6 +49,8 @@ const restoreJobs = new Map();
  *   post:
  *     tags: [Backups]
  *     summary: 백업 작업 시작
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       202:
  *         description: 작업 접수됨
@@ -96,6 +98,8 @@ router.post('/backups', async (req, res) => {
  *   get:
  *     tags: [Backups]
  *     summary: 백업 작업 상태 조회
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: jobId
@@ -156,6 +160,8 @@ router.get('/backups/:jobId', async (req, res) => {
  *   post:
  *     tags: [Backups]
  *     summary: 백업 파일로 복원 시작
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -222,6 +228,8 @@ router.post('/restores', upload.single('backupFile'), async (req, res) => {
  *   get:
  *     tags: [Backups]
  *     summary: 복원 작업 상태 조회
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: jobId
@@ -452,6 +460,8 @@ async function performRestore(jobId, backupFilePath) {
  *   get:
  *     tags: [Backups]
  *     summary: 백업 파일 다운로드
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: filename
