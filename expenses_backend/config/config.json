@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "0hoxy",
+    "password": null,
+    "database": "expenses_db",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "0hoxy",
+    "password": null,
+    "database": "expenses_db_test",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "0hoxy",
+    "password": null,
+    "database": "expenses_db_prod",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  }
+}

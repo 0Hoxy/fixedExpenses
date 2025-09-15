@@ -1,0 +1,55 @@
+# Root .gitignore for fixedExpenses (shared rules only)
+
+# ----------------------
+# OS / Editor / IDE
+# ----------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# ----------------------
+# Git / Credentials
+# ----------------------
+.git-credentials
+.gitconfig.local
+
+# ----------------------
+# Env / Secrets
+# ----------------------
+.env
+.env.*
+!.env.example
+config.env
+config/*.local.*
+secrets.*
+*.pem
+*.p12
+*.mobileprovision
+*.keystore
+*.jks
+
+# ----------------------
+# Logs / Temp
+# ----------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tmp
+*.swp
+*.swo
+
+## Project-specific ignores live in:
+# - expenses_backend/.gitignore (Node backend)
+# - fixed_expenses_app/.gitignore (Flutter app)
+
+# Flutter SDK archives (if accidentally downloaded at repo root)
+flutter_*.zip
+flutter_macos_*.zip
+
